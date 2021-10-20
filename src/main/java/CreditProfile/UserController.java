@@ -3,7 +3,7 @@ package CreditProfile;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +40,16 @@ class UserController {
 	      .orElseThrow(()-> new UserNotFoundException(id));
 	  }
 	
+	//Patch user's credit
+	@PatchMapping("/user/{id}")
+	User patchUser(@RequestBody User newUser, @PathVariable Long id) {
+		User user = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+		
+		user.setCredit(newUser.getCredit());
+		
+		return repository.save(user);
+		
+	}
 	//Change profile
 	@PutMapping("/user/{id}")
 	User replaceUser(@RequestBody User newUser,@PathVariable Long id) {
